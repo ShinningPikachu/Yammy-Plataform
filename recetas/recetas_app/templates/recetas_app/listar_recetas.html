@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Recetas</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            background-color: #ff6f61;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        a {
+            text-decoration: none;
+            background-color: #ff6f61;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #e5554c;
+            transform: scale(1.05);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        li {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            animation: fadeIn 1s ease;
+        }
+
+        h2 {
+            margin: 10px 0;
+            font-size: 24px;
+            color: #ff6f61;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .logo {
+            position: fixed; /* Keeps the logo in place when scrolling */
+            top: 20px; /* Adjust to position the logo */
+            left: 20px; /* Adjust for top-left or use right for top-right */
+            width: 200px; /* Adjust the size */
+            z-index: 1000; /* Ensures it stays above other content */
+            left: auto;
+        }
+        .profile-button {
+            background-color: white;
+            color: #ff6f61;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-bottom: 10px; /* Adds space below the first button */
+        }
+        .button-container {
+            text-align: right; /* Align content to the right */
+        }
+        .profile-button:hover {
+            background-color: #e5554c;
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!--<img src="{% static 'recetas_app/logo.png' %}" alt="Logo" class="logo">-->
+    <header>
+        <h1>🍴 Lista de Recetas</h1>
+        <div class="button-container">
+            <div>
+                <button class="profile-button" onclick="window.location.href='{% url 'user_profile' %}'">Mi Perfil</button>
+            </div>
+            <div>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="profile-button" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+    <div style="text-align: center; margin: 20px 0;">
+        <a href="{% url 'subir_receta' %}">Subir Nueva Receta</a>
+    </div>
+    <ul>
+        {% for receta in recetas %}
+        <li>
+            <h2>{{ receta.titulo }}</h2>
+            <p>{{ receta.descripcion }}</p>
+            {% if receta.imagen %}
+            <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" width="200">
+            {% endif %}
+            <div>
+            <a href="{% url 'detalle_receta' receta.pk %}">Ver más detalles</a> <!-- Link to the detail page -->    
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
